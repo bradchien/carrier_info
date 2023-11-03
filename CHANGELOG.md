@@ -1,3 +1,16 @@
+
+## 3.0.0
+* Breaking changes for android 10 and below as Telephony is no longer supported by them 
+* Removal of permission checking from package, you'll need to manage permission on the mobile end 
+
+## 2.0.8
+* Breaking changes for Multi sim suport
+* Syntax clean up
+
+## 2.0.6
+* Add support for Flutter 2.17.0 (Stable channel)
+* Syntax clean up
+
 ## 2.0.5-beta.2.13.0
 * Add support for Flutter 2.13.0 (Beta channel) [slightfoot](https://github.com/slightfoot)
 
