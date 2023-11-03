@@ -13,6 +13,6 @@ void main() {
   });
 
   tearDown(() {
-    channel.setMockMethodCallHandler(null);
+    // channel.setMockMethodCallHandler(null);
   });
 }

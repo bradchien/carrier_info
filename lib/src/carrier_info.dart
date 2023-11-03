@@ -15,9 +15,12 @@ class CarrierInfo {
   }
 
   /// Get all carrier data ios device
-  static Future<IosCarrierData> getIosInfo() async {
-    return IosCarrierData.fromMap(
-      await _channel.invokeMethod('getIosInfo'),
-    );
+  static Future<IosCarrierData?> getIosInfo() async {
+    Map? map = await _channel.invokeMethod('getIosInfo');
+    if(map != null) {
+      return IosCarrierData.fromMap(map);
+    } else {
+      return null;
+    }
   }
 }

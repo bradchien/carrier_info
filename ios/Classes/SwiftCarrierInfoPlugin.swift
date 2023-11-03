@@ -1,10 +1,10 @@
 import Flutter
 import UIKit
 
-@available(iOS 12.0, *)
 public class SwiftCarrierInfoPlugin: NSObject, FlutterPlugin {
+#if os(iOS)
     fileprivate let carrier = Carrier()
-    
+#endif
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "plugins.chizi.tech/carrier_info", binaryMessenger: registrar.messenger())
@@ -17,8 +17,12 @@ public class SwiftCarrierInfoPlugin: NSObject, FlutterPlugin {
             switch call.method {
             
             case "getIosInfo":
+#if os(iOS)
                 result(carrier.carrierInfo)
-                
+#else
+                result(nil)
+#endif
+
             default:
                 result(FlutterMethodNotImplemented)
                 return

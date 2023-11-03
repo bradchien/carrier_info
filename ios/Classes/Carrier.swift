@@ -5,9 +5,9 @@
 // From https://github.com/StanislavK/Carrier/blob/master/Carrier/Classes/Carrier.swift
 
 import UIKit
+
+#if os(iOS)
 import CoreTelephony
-
-
 
 enum ShortRadioAccessTechnologyList: String {
     case gprs = "GPRS"
@@ -32,12 +32,14 @@ public protocol CarrierDelegate: AnyObject {
     func carrierRadioAccessTechnologyDidChange()
 }
 
-@available(iOS 12.0, *)
 final public class Carrier {
-    
+
     // MARK: - Private Properties
     private let networkInfo = CTTelephonyNetworkInfo()
+
+	@available(iOS 12.0, *)
     private let planProvisioning = CTCellularPlanProvisioning()
+
     private var carriers = [String : CTCarrier]()
     private var changeObserver: NSObjectProtocol!
     
@@ -45,7 +47,7 @@ final public class Carrier {
         
         changeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.CTRadioAccessTechnologyDidChange, object: nil, queue: nil) { [unowned self](notification) in
             DispatchQueue.main.async { [weak self] in
-                self.delegate?.carrierRadioAccessTechnologyDidChange()
+                self?.delegate?.carrierRadioAccessTechnologyDidChange()
             }
         }
         
@@ -134,3 +136,4 @@ final public class Carrier {
         }
     }
 }
+#endif

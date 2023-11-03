@@ -1,3 +1,8 @@
+## 3.0.5
+* Fix syntax error 
+
+## 3.0.1
+* Make library buildable on tvOS 
 
 ## 3.0.0
 * Breaking changes for android 10 and below as Telephony is no longer supported by them 
