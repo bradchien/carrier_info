@@ -228,11 +228,15 @@ internal class MethodCallHandlerImpl(context: Context, activity: Activity?) : Me
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun isMultiSimSupported(): String {
-        return when (mDefaultTelephonyManager!!.isMultiSimSupported) {
-            TelephonyManager.MULTISIM_ALLOWED -> return "MULTISIM_ALLOWED"
-            TelephonyManager.MULTISIM_NOT_SUPPORTED_BY_CARRIER -> return "MULTISIM_NOT_SUPPORTED_BY_CARRIER"
-            TelephonyManager.MULTISIM_NOT_SUPPORTED_BY_HARDWARE -> return "MULTISIM_NOT_SUPPORTED_BY_HARDWARE"
-            else -> ""
+        if(mDefaultTelephonyManager!!.hasCarrierPrivileges()) {
+            return when (mDefaultTelephonyManager!!.isMultiSimSupported) {
+                TelephonyManager.MULTISIM_ALLOWED -> return "MULTISIM_ALLOWED"
+                TelephonyManager.MULTISIM_NOT_SUPPORTED_BY_CARRIER -> return "MULTISIM_NOT_SUPPORTED_BY_CARRIER"
+                TelephonyManager.MULTISIM_NOT_SUPPORTED_BY_HARDWARE -> return "MULTISIM_NOT_SUPPORTED_BY_HARDWARE"
+                else -> ""
+            }
+        } else {
+            return ""
         }
     }
 

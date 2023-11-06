@@ -1,3 +1,6 @@
+## 3.0.6
+* Fix Android runtime error 
+
 ## 3.0.5
 * Fix syntax error 
 
