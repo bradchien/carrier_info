@@ -1,3 +1,6 @@
+## 3.0.7
+* Fix iOS build error 
+
 ## 3.0.6
 * Fix Android runtime error 
 

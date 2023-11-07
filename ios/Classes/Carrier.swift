@@ -37,78 +37,78 @@ final public class Carrier {
     // MARK: - Private Properties
     private let networkInfo = CTTelephonyNetworkInfo()
 
-	@available(iOS 12.0, *)
-    private let planProvisioning = CTCellularPlanProvisioning()
+    private var planProvisioning : AnyObject? = nil
 
     private var carriers = [String : CTCarrier]()
     private var changeObserver: NSObjectProtocol!
-    
+
     public init() {
-        
+
         changeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.CTRadioAccessTechnologyDidChange, object: nil, queue: nil) { [unowned self](notification) in
             DispatchQueue.main.async { [weak self] in
                 self?.delegate?.carrierRadioAccessTechnologyDidChange()
             }
         }
-        
+
         if #available(iOS 12.0, *) {
+            planProvisioning = CTCellularPlanProvisioning()
             self.carriers = networkInfo.serviceSubscriberCellularProviders ?? [:]
-            
+
         } else {
             if(networkInfo.subscriberCellularProvider != nil){
                 carriers = ["0": networkInfo.subscriberCellularProvider!]
             }
-            
+
         }
-        
-        
+
+
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(changeObserver!)
     }
-    
+
     public weak var delegate: CarrierDelegate?
-    
-    
-    
+
+
+
     /// Returns current radio access technology type used (GPRS, Edge, LTE, etc.) with the carrier.
     public var carrierRadioAccessTechnologyTypeList: [String?] {
         var technologyList  =  [String]()
-        
+
         if #available(iOS 12.0, *) {
-            
+
             let prefix = "CTRadioAccessTechnology"
             guard let currentTechnologies = networkInfo.serviceCurrentRadioAccessTechnology else {
                 return []
             }
-            
-            
+
+
             for technology in currentTechnologies.values {
-                
+
                 if technology.hasPrefix(prefix) {
                     technologyList.append(String(technology.dropFirst(prefix.count)))
-                    
+
                 }else{
-                    
+
                     technologyList.append(ShortRadioAccessTechnologyList(rawValue: technology)?.generation ?? "3G")
-                    
+
                 }
-                
+
             }
-            
+
         }
-        
+
         return technologyList
-        
+
     }
-    
-    
+
+
     /// Returns all available info about the carrier.
     public var carrierInfo: [String: Any?] {
-        
+
         var dataList =  [[String: Any?]]()
-        
+
         for carr in carriers.values {
             dataList.append([
                 "carrierName": carr.carrierName,
@@ -117,22 +117,28 @@ final public class Carrier {
                 "mobileNetworkCode": carr.mobileNetworkCode,
                 "carrierAllowsVOIP": carr.allowsVOIP,
             ])
-            
+
         }
-        
+
        if #available(iOS 16.0, *) {
             return [
                 "carrierData": dataList,
                 "carrierRadioAccessTechnologyTypeList": carrierRadioAccessTechnologyTypeList,
-                "supportsEmbeddedSIM": planProvisioning.supportsEmbeddedSIM,
+                "supportsEmbeddedSIM": (planProvisioning as! CTCellularPlanProvisioning).supportsEmbeddedSIM,
                 "serviceCurrentRadioAccessTechnology": networkInfo.serviceCurrentRadioAccessTechnology,
             ]
-        }else {
+        } else if #available(iOS 12.0, *){
             return [
                 "carrierData": dataList,
                 "carrierRadioAccessTechnologyTypeList": carrierRadioAccessTechnologyTypeList,
                 "serviceCurrentRadioAccessTechnology": networkInfo.serviceCurrentRadioAccessTechnology,
             ]
+        } else {
+            return [
+                "carrierData": dataList,
+                "carrierRadioAccessTechnologyTypeList": carrierRadioAccessTechnologyTypeList,
+            ]
+
         }
     }
 }
