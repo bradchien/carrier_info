@@ -14,7 +14,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  CarrierData carrierInfo;
+  CarrierData? carrierInfo;
 
   @override
   void initState() {
@@ -129,10 +129,10 @@ class _MyAppState extends State<MyApp> {
 class HomeItem extends StatelessWidget {
   final bool isFirst;
   final String title;
-  final String value;
+  final String? value;
   const HomeItem({
-    Key key,
-    @required this.title,
+    Key? key,
+    required this.title,
     this.value,
     this.isFirst = false,
   }) : super(key: key);
