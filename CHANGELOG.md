@@ -1,3 +1,6 @@
+## 3.0.15
+* Fix runtime error on Android TV 
+
 ## 3.0.7
 * Fix iOS build error 
 

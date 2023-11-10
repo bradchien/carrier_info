@@ -9,9 +9,12 @@ class CarrierInfo {
 
   /// Get carrier data from android device
   static Future<AndroidCarrierData?> getAndroidInfo() async {
-    return AndroidCarrierData.fromMap(
-      await _channel.invokeMethod('getAndroidInfo'),
-    );
+    Map? map = await _channel.invokeMethod('getAndroidInfo');
+    if(map != null) {
+      return AndroidCarrierData.fromMap(map);
+    } else {
+      return null;
+    }
   }
 
   /// Get all carrier data ios device
