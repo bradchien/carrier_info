@@ -3,8 +3,11 @@ package com.chizi.carrier_info
 
 import android.Manifest
 import android.app.Activity
+import android.app.UiModeManager
 import android.content.Context
+import android.content.Context.UI_MODE_SERVICE
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -99,7 +102,9 @@ internal class MethodCallHandlerImpl(context: Context, activity: Activity?) : Me
 
 
 	private fun getInfo(result: MethodChannel.Result) {
-		if(mDefaultTelephonyManager?.serviceState == null ) {
+		if ((activity?.getSystemService(UI_MODE_SERVICE) as UiModeManager?)?.run {
+				getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION
+			} == true) {
 			result.success(null)
 			return
 		}

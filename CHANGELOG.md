@@ -1,3 +1,6 @@
+## 3.0.19
+* Fix runtime error on Android
+
 ## 3.0.15
 * Fix runtime error on Android TV 
 
